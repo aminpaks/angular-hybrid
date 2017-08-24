@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "root/*": ["src/app/*"]
+        },
+        "allowJs": true,
+        "target": "es5",
+        "module": "es2015",
+        "sourceMap": true,
+        "declaration": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "removeComments": true,
+        "strictNullChecks": false
+    },
+    "typeRoots": [
+        "./node_modules/@types"
+    ],
+    "buildOnSave": false,
+    "compileOnSave": false
+}
