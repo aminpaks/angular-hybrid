@@ -5,7 +5,10 @@ import { Ng1Module } from 'root/ng1-module';
 // NG1 component
 Ng1Module
     .component('alertComponent', {
-        template: `<h4><span style="color: red">{{title}}</span></h4>`,
+        template: `
+        <h4><span style="color: red">{{title}}</span></h4>
+        <common-component></common-component>
+        `,
         controller: ['$scope', function($scope) {
             $scope.title = 'Alerts - Angular1 component';
         }]

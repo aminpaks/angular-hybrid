@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AlertsPageComponent } from './alerts/page';
 import { HomeComponent } from './home/component';
+import { TestComponent } from './alerts/test/component';
 
 const rootRoutes: Routes = [
     {
@@ -16,7 +17,16 @@ const rootRoutes: Routes = [
     },
     {
         path: 'alerts',
-        component: AlertsPageComponent,
+        children: [
+            {
+                path: '',
+                component: AlertsPageComponent,
+            },
+            {
+                path: 'test',
+                component: TestComponent,
+            }
+        ]
     }
 ];
 

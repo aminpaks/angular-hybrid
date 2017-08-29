@@ -73,6 +73,10 @@ module.exports = {
                 ],
             },
             {
+                test: /\.html$/,
+                loader: ['html-loader'],
+            },
+            {
                 test: /\.(less|css)$/,
                 use: ExtractTextPlugin.extract({
                     use: [
