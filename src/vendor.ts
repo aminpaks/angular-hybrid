@@ -10,10 +10,7 @@ import '@angular/core';
 import '@angular/common';
 import '@angular/http';
 import '@angular/router';
-// import '@angular/forms';
+import '@angular/forms';
 
 // Angular 1
 import 'angular';
-
-// import '@angularclass/hmr';
-
