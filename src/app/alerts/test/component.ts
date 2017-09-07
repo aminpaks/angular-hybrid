@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
     `,
 })
 export class TestComponent {
-    index = 'TEST Angular 2';
+    index = 'This is an Angular 4 component fully functional within an AngularJS component!';
 }

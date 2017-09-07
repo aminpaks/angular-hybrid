@@ -45,6 +45,7 @@ module.exports = {
     entry: {
         main: './src/main.ts',
         vendor: ['./src/vendor.ts', './src/polyfills.ts'],
+        styles: './src/styles.less',
     },
 
     output: {
@@ -78,25 +79,25 @@ module.exports = {
             },
             {
                 test: /\.(less|css)$/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'less-loader',
-                            options: {
-                                sourceMap: true
-                            }
+                use: [
+                    {
+                        loader: 'style-loader',
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
                         }
-                    ],
-                    fallback: 'style-loader'
-                })
-            }
-        ]
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ],
+            },
+        ],
     },
 
     devServer: {
@@ -115,24 +116,17 @@ module.exports = {
             /angular(\\|\/)core(\\|\/)@angular/,
             path.resolve(__dirname, './src')
         ),
-        // new UglifyJSPlugin(),
-        new ExtractTextPlugin({ filename: 'styles.[hash].css', disable: true }),
-        // new CommonsChunkPlugin({
-        //     async: true,
-        //     children: true,
-        //     minChunks: function(module, count) {
-        //         return module.resource && (/home\/module/).test(module.resource);
-        //     }
-        // }),
+        // new ExtractTextPlugin({ filename: 'styles.[chunkhash].css', disable: true }),
         new CommonsChunkPlugin({
-        	names: 'vendor',
-            // minChunks: ({ context, resource }) => {
-            //     if (resource && (/^.*\.(css|less)$/).test(resource)) {
-            //         return false;
-            //     }
-            //     return context && context.includes('node_modules');
-            // },
-        	filename: 'vendor.[hash].js',
+            name: 'home',
+            async: true,
+            children: true,
+            minChunks: function (module, count) {
+                return module.resource && (/app\/home/i).test(module.resource);
+            }
+        }),
+        new CommonsChunkPlugin({
+            name: 'vendor',
             minChunks: Infinity,
         }),
     ]

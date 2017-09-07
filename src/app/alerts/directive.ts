@@ -1,9 +1,9 @@
 import { Directive, ElementRef, Injector, Inject } from '@angular/core';
 import { UpgradeComponent } from '@angular/upgrade/static';
-import { Ng1Module } from 'root/ng1-module';
+import { AlertNG1Module } from './ng1-module';
 
 // NG1 component
-Ng1Module
+AlertNG1Module
     .component('alertComponent', {
         template: `
         <h4><span style="color: red">{{title}}</span></h4>

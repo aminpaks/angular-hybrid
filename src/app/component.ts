@@ -10,6 +10,12 @@ import { Router } from '@angular/router';
         <button (click)="goto('/alerts')">Alerts</button>
         <router-outlet></router-outlet>
     `,
+    styles: [`
+    :host {
+        display: block;
+        padding: 20px;
+    }
+    `]
 })
 export class RootComponent {
     ngVersion = VERSION.full;

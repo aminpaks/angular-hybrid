@@ -1,9 +1,6 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "paths": {
-            "root/*": ["src/app/*"]
-        },
         "allowJs": true,
         "target": "es5",
         "module": "commonjs",
