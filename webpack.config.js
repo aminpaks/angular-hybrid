@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 
 /*
  * We've enabled UglifyJSPlugin for you! This minifies your app
@@ -32,16 +33,36 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ChunksPlugin = require('webpack-split-chunks');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const { CommonsChunkPlugin,  } = webpack.optimize;
+const { NamedModulesPlugin } = webpack;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
 
+const nodeModules = path.join(process.cwd(), 'node_modules');
+const realNodeModules = fs.realpathSync(nodeModules);
+
 const isProd = false;
+
+function sortEntries() {
+    const entryPoints = ['inline', 'styles', 'vendor', 'main'];
+    return (left, right) => {
+        let leftIndex = entryPoints.indexOf(left.names[0]);
+        let rightindex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightindex) {
+            return 1;
+        }
+        else if (leftIndex < rightindex) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    };
+}
 
 module.exports = {
     devtool: isProd ? 'hidden-source-map' : 'source-map',
 
-    // context: path.resolve(__dirname, './src/'),
     entry: {
         main: './src/main.ts',
         vendor: ['./src/vendor.ts', './src/polyfills.ts'],
@@ -49,13 +70,13 @@ module.exports = {
     },
 
     output: {
-        filename: '[name].[chunkhash].js',
-        chunkFilename: '[name].[chunkhash].js',
+        filename: '[name].js',
+        chunkFilename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
 
     resolve: {
-        extensions: ['.ts', '.js', '.less', '.html'],
+        extensions: ['.ts', '.js'],
         alias: {
             d3v3: path.resolve('node_modules', 'd3v3', 'd3.js'),
             '@angular/upgrade/static': '@angular/upgrade/bundles/upgrade-static.umd.js',
@@ -108,26 +129,27 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.NamedModulesPlugin(),
+        new NamedModulesPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve('./src/index.html'),
+            chunksSortMode: sortEntries(),
         }),
         new ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)@angular/,
             path.resolve(__dirname, './src')
         ),
-        // new ExtractTextPlugin({ filename: 'styles.[chunkhash].css', disable: true }),
         new CommonsChunkPlugin({
-            name: 'home',
-            async: true,
-            children: true,
-            minChunks: function (module, count) {
-                return module.resource && (/app\/home/i).test(module.resource);
-            }
+            minChunks: 2,
+            async: 'common',
         }),
         new CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: Infinity,
+            name: ['vendor'],
+            minChunks: (module) => {
+                return module.resource
+                    && (module.resource.startsWith(nodeModules)
+                        || module.resource.startsWith(realNodeModules));
+            },
+            chunks: ['main']
         }),
     ]
 };

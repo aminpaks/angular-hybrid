@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
     selector: 'root-component',
     template: `
         <h1>Root component ({{ngVersion}})</h1>
-        <button (click)="goto('/')">Root</button>
-        <button (click)="goto('/home')">Home</button>
+        <button (click)="goto('/')">Home</button>
         <button (click)="goto('/alerts')">Alerts</button>
         <router-outlet></router-outlet>
     `,
